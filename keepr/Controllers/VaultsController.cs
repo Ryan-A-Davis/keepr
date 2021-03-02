@@ -11,51 +11,39 @@ namespace keepr.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class KeepsController : ControllerBase
+	public class VaultsController : ControllerBase
 	{
+		private readonly VaultsService _vs;
 		private readonly KeepsService _ks;
-		public KeepsController(KeepsService ks)
+		public VaultsController(VaultsService vs, KeepsService ks)
 		{
+			_vs = vs;
 			_ks = ks;
 		}
 
-		[HttpGet]
-		public ActionResult<IEnumerable<Keep>> Get()
+		[HttpGet("{id}/keeps")]
+		public <ActionResult<IEnumerable<Keep>> GetKeepsByVaultId(int id)
 		{
 			try
 			{
-				return Ok(_ks.GetAll());
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message);
-			};
-		}
-
-		[HttpGet("{id}")]
-		public ActionResult<Keep> Get(int id)
-		{
-			try
-			{
-				return Ok(_ks.GetById(id));
+				return Ok(_ks.GetByVaultId(id));
 			}
 			catch (Exception e)
 			{
 				return BadRequest(e.Message);
 			}
 		}
-
 
 
 		[HttpPost]
 		[Authorize]
-		public async Task<ActionResult<Keep>> Post([FromBody] Keep newKeep)
+		public async Task<ActionResult<Vault>> Post([FromBody] Vault newVault)
 		{
 			try
 			{
 				Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-				newKeep.CreatorId = userInfo.Id;
-				Keep created = _ks.Create(newKeep);
+				newVault.CreatorId = userInfo.Id;
+				Vault created = _vs.Create(newVault);
 				created.Creator = userInfo;
 				return Ok(created);
 			}
@@ -67,15 +55,14 @@ namespace keepr.Controllers
 
 		[HttpPut("{id}")]
 		[Authorize]
-		public async Task<ActionResult<Keep>> Edit(int id, [FromBody] Keep editData)
+		public async Task<ActionResult<Vault>> Edit(int id, [FromBody] Vault editData)
 		{
 			try
 			{
 				Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
 				editData.Id = id;
 				editData.Creator = userInfo;
-				editData.CreatorId = userInfo.Id;
-				return Ok(_ks.Edit(editData, userInfo.Id));
+				return Ok(_vs.Edit(editData, userInfo.Id));
 			}
 			catch (Exception e)
 			{
@@ -90,7 +77,7 @@ namespace keepr.Controllers
 			try
 			{
 				Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-				return Ok(_ks.Delete(id, userInfo.Id));
+				return Ok(_vs.Delete(id, userInfo.Id));
 			}
 			catch (Exception e)
 			{

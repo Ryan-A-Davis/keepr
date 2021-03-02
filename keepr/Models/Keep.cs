@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace keepr.Models
 {
 	public class Keep
@@ -9,8 +11,7 @@ namespace keepr.Models
 		public string Img { get; set; }
 		public int Views { get; set; }
 		public int Keeps { get; set; }
-
-		public Profile Owner { get; set; }
+		public Profile Creator { get; set; }
 
 	}
 }

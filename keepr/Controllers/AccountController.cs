@@ -11,7 +11,7 @@ using keepr.Services;
 namespace keepr.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	[Authorize]
 	public class AccountController : ControllerBase
 	{
@@ -37,20 +37,5 @@ namespace keepr.Controllers
 				return BadRequest(e.Message);
 			}
 		}
-
-		// [HttpGet("keeps")]
-		// public async Task<ActionResult<IEnumerable<Keep>>> GetKeepsByProfileIdAsync()
-		// {
-		// 	try
-		// 	{
-		// 		Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-		// 		IEnumerable<Keep> keeps = _ks.GetKeepsByAccountId(userInfo.Id);
-		// 		return Ok(keeps);
-		// 	}
-		// 	catch (Exception e)
-		// 	{
-		// 		return BadRequest(e.Message);
-		// 	}
-		// }
 	}
 }

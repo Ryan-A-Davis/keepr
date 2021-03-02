@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using keepr.Repositories;
+using keepr.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,7 +54,16 @@ namespace keepr
 													.AllowCredentials();
 							});
 				});
+			//TODO Be sure to add in transients as needed
 
+			services.AddTransient<ProfilesRepository>();
+			services.AddTransient<ProfilesService>();
+			services.AddTransient<KeepsService>();
+			services.AddTransient<KeepsRepository>();
+			services.AddTransient<VaultsService>();
+			services.AddTransient<VaultsRepository>();
+			services.AddTransient<VaultKeepsService>();
+			services.AddTransient<VaultKeepsRepository>();
 
 			services.AddControllers();
 
@@ -78,6 +89,7 @@ namespace keepr
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "keepr v1"));
+				app.UseCors("CorsDevPolicy");
 			}
 
 			app.UseHttpsRedirection();
@@ -91,6 +103,7 @@ namespace keepr
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
+
 			});
 		}
 	}
