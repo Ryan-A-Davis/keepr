@@ -5,15 +5,19 @@
         <h1>{{ state.vault.name }}</h1>
       </div>
       <div class="col-3">
-        <button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#staticBackdrop' + route.params.id">
-        </button>
       </div>
     </div>
     <div class="row justify-content-around">
-      <Keep v-for="keep in state.keeps" :key="keep.id" :keep-props="keep" />
+      <div v-for="keep in state.keeps" :key="keep.id">
+        <Keep :keep-props="keep" />
+        <!-- TODO delete relationship vk from here -->
+        <button class="btn btn-danger" @click="remove(keep.vaultKeepId)">
+          Delete
+        </button>
+      </div>
     </div>
   </div>
-</template>m
+</template>
 
 <script>
 import { AppState } from '../AppState'
@@ -22,6 +26,8 @@ import { keepsService } from '../services/KeepsService'
 import { vaultsService } from '../services/VaultsService'
 import { useRoute } from 'vue-router'
 import { logger } from '../utils/Logger'
+import NotificationService from '../services/NotificationsService'
+import { vaultKeepsService } from '../services/VaultKeepsService'
 
 export default {
   name: 'VaultDetails',
@@ -41,7 +47,23 @@ export default {
         logger.error(error)
       }
     })
-    return { state }
+    return {
+      state,
+      route,
+      async remove(id) {
+        try {
+          if (await NotificationService.confirm()) {
+            // let delorted = await keepsService.getByVaultId(route.params.id)
+            // delorted.find(k=> k.id = )
+            await vaultKeepsService.delete(id)
+          } else {
+            alert('Changes not saved')
+          }
+        } catch (error) {
+          logger.error(error)
+        }
+      }
+    }
   },
   components: {}
 }

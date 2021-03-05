@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using keepr.Models;
 using keepr.Services;
 using keepr.Exceptions;
+using Microsoft.AspNetCore.Http;
 
 namespace keepr.Controllers
 {
@@ -26,14 +27,16 @@ namespace keepr.Controllers
 
 		public async Task<ActionResult<Vault>> Get(int id)
 		{
+
 			try
 			{
 				Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-				return Ok(_vs.Get(id, userInfo.Id));
+
+				return Ok(_vs.Get(id, userInfo?.Id));
 			}
 			catch (NotAuthorized e)
 			{
-				return Forbid(e.Message);
+				return StatusCode(StatusCodes.Status403Forbidden, e.Message);
 			}
 			catch (Exception e)
 			{
@@ -47,11 +50,12 @@ namespace keepr.Controllers
 			try
 			{
 				Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-				return Ok(_ks.GetByVaultId(id, userInfo.Id));
+				return Ok(_ks.GetByVaultId(id, userInfo?.Id));
 			}
 			catch (NotAuthorized e)
 			{
-				return Forbid(e.Message);
+				//NOTE DO this  to all forbiddens
+				return StatusCode(StatusCodes.Status403Forbidden, e.Message);
 			}
 			catch (Exception e)
 			{
@@ -67,8 +71,8 @@ namespace keepr.Controllers
 			try
 			{
 				Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-				newVault.CreatorId = userInfo.Id;
 				newVault.Creator = userInfo;
+				newVault.CreatorId = userInfo.Id;
 				Vault created = _vs.Create(newVault);
 				return Ok(created);
 			}

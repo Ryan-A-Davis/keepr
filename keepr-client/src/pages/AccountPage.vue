@@ -8,39 +8,53 @@
       </div>
     </div>
     <div class="row">
-      <h4>Vaults:</h4>
-      <Vault v-for="v in state.vaults" :key="v" :vault-props="v" />
+      <h4>Vaults: {{ state.vaults.length }}</h4>
+      <button type="button" class="btn btn-primary mx-5" data-toggle="modal" data-target="#vaultCreateModal">
+        + New Vault
+      </button>
+      <!-- TODO Create vault form -->
+      <Vault v-for="v in state.vaults" :key="v.id" :vault-props="v" />
     </div>
     <div class="row">
-      <h4>Keeps:</h4>
-      <Keep v-for="k in state.keeps" :key="k" :keep-props="k" />
+      <h4>Keeps: {{ state.keeps.length }}</h4>
+      <button type="button" class="btn btn-primary mx-5" data-toggle="modal" data-target="#keepCreateModal">
+        + New Keep
+      </button>
+      <!-- TODO Create Keep form -->
+      <Keep v-for="k in state.keeps" :key="k.id" :keep-props="k" />
     </div>
+    <VaultCreateModal />
+    <KeepCreateModal />
   </div>
 </template>
 
 <script>
 import { onMounted, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { accountService } from '../services/AccountService'
+import { useRoute, useRouter } from 'vue-router'
 import { AppState } from '../AppState'
 import { vaultsService } from '../services/VaultsService'
 import { keepsService } from '../services/KeepsService'
 import { logger } from '../utils/Logger'
+import { profilesService } from '../services/ProfilesService'
 export default {
   name: 'AccountPage',
   setup() {
     const router = useRouter()
+    const route = useRoute()
     // const route = useRoute()
     const state = reactive({
       profile: computed(() => AppState.activeProfile),
       keeps: computed(() => AppState.keeps),
       vaults: computed(() => AppState.vaults),
-      selectedVault: computed(() => AppState.activeVault)
+      selectedVault: computed(() => AppState.activeVault),
+      account: computed(() => AppState.account)
+
     })
     onMounted(async() => {
       try {
-        await accountService.getVaults()
-        await accountService.getKeeps()
+        await profilesService.getById(route.params.id)
+        await keepsService.getByProfileId(route.params.id)
+        await vaultsService.getByProfileId(route.params.id)
       } catch (error) {
         logger.error(error)
       }

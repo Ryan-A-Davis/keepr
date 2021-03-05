@@ -1,5 +1,5 @@
 <template>
-  <div class="keep col-4-lg-3 card"
+  <div class="keep col-4-lg-3 card item"
        @click="updateViews(keepProps.id)"
        type="button"
        :data-target="'#modal' + keepProps.id "
@@ -11,11 +11,11 @@
         <p>{{ keepProps.name }}</p>
       </div>
       <div class="col-4">
-        <img class="rounded" :src="keepProps.creator.picture" alt="">
+        <img id="profImg" :src="keepProps.creator.picture" alt="">
       </div>
-      <KeepModal :keep-props="keepProps" />
     </div>
   </div>
+  <KeepModal :keep-props="keepProps" />
 </template>
 
 <script>
@@ -67,8 +67,13 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
 }
-.img{
-  max-height: 15px;
+#profImg{
+  border-radius: 50%;
+  max-height: 70px;
+}
+
+.item{
+  margin: 7%;
 }
 
 </style>

@@ -3,13 +3,13 @@ import { api } from './AxiosService'
 import { logger } from '../utils/Logger'
 
 class VaultKeepsService {
-  async create(keepId, vaultId) {
-    const res = await api.post('api/vaultkeeps', { vaultId: vaultId, keepId: keepId })
+  async create(vaultId, keepId) {
+    const res = await api.post('api/vaultkeeps', { keepId: keepId, vaultId: vaultId })
     logger.log(res.data)
   }
 
-  async delete(keepId, vaultId) {
-    const res = await api.delete('api/vaultkeeps', { vaultId: vaultId, keepId: keepId })
+  async delete(id) {
+    const res = await api.delete('api/vaultkeeps/' + id)
     logger.log(res)
   }
 }

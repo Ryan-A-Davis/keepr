@@ -1,36 +1,36 @@
 <template>
-  <div class="VaultEditModal">
+  <div class="KeepCreateModal">
     <div class="modal fade"
-         :id="'staticBackdrop' + vaultProps.id"
+         id="keepCreateModal"
          data-backdrop="static"
          data-keyboard="false"
          tabindex="-1"
          aria-labelledby="staticBackdropLabel"
          aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
-              Edit Vault
+              Create Keep
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="edit(vaultProps.id)" class="form-group">
-              <input type="text" v-model="state.updated.name" placeholder="Change vault name?" required>
-              <input type="text" v-model="state.updated.description" placeholder="Change vault description?" required>
-              <input type="checkbox" v-model="state.updated.isPrivate">
+            <form @submit.prevent="createKeep()" class="form-group">
+              <input type="text" v-model="state.newKeep.name" placeholder="Enter eep name..." required>
+              <input type="text" v-model="state.newKeep.description" placeholder="Enter keep description..." required>
+              <input type="text" v-model="state.newKeep.img" placeholder="Enter an img url..." required>
+              <button type="submit" class="btn btn-primary">
+                Save Changes
+              </button>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Close
-            </button>
-            <button type="submit" class="btn btn-primary">
-              Save Changes
             </button>
           </div>
         </div>
@@ -41,31 +41,28 @@
 
 <script>
 import { computed, reactive } from 'vue'
-import { vaultsService } from '../services/VaultsService'
+import { keepsService } from '../services/KeepsService'
 import { AppState } from '../AppState'
+import { logger } from '../utils/Logger'
 export default {
-  name: 'VaultEditModal',
-  props: {
-    vaultProps: {
-      type: Object,
-      required: true
-    }
-  },
+  name: 'KeepCreateModal',
   setup() {
     const state = reactive({
       user: computed(() => AppState.user),
       profile: computed(() => AppState.activeProfile),
       account: computed(() => AppState.account),
-      updated: {}
+      newKeep: {}
     })
     return {
       state,
-      async edit(id) {
+      async createKeep() {
+        state.newKeep.creatorId = state.account.id
         try {
-          await vaultsService.edit(id)
+          await keepsService.create(state.newKeep)
         } catch (error) {
-
+          logger.error(error)
         }
+        state.newKeep = {}
       }
     }
   },

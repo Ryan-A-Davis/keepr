@@ -40,8 +40,7 @@ namespace keepr.Controllers
 			}
 		}
 
-		[HttpGet("{vaults}")]
-
+		[HttpGet("/vaults")]
 		public async Task<ActionResult<IEnumerable<Vault>>> GetVaults(string id)
 		{
 			Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();

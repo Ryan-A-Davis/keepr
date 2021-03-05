@@ -37,6 +37,7 @@ namespace keepr.Services
 		{
 			Vault vault = _vrepo.Get(vaultKeep.VaultId);
 			Keep keep = _krepo.GetById(vaultKeep.KeepId);
+			keep.Keeps++;
 			if (vault == null || keep == null)
 			{
 				throw new Exception("Invalid keep/vault Id");

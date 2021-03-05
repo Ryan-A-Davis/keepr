@@ -28,9 +28,9 @@ namespace keepr.Services
 			{
 				throw new Exception("Invalid Id");
 			}
-			if (vault.CreatorId != userId && vault.IsPrivate)
+			if (vault.IsPrivate && vault.CreatorId != userId)
 			{
-				throw new NotAuthorized("You are not the owner, and this vault is set to private");
+				throw new NotAuthorized("Vault is private");
 			}
 			return vault;
 		}

@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <div class="row justify-content-around">
-      <Keep v-for="keep in state.keeps" :key="keep.id" :keep-props="keep" />
+    <div class="row justify-content-around masonry">
+      <Keep v-for="keep in state.keeps" :key="keep.id" :keep-props="keep" :class="'item'" />
     </div>
   </div>
 </template>
@@ -12,7 +12,6 @@ import { AppState } from '../AppState'
 import { keepsService } from '../services/KeepsService'
 // import { useRouter } from 'vue-router'
 import { logger } from '../utils/Logger'
-import { vaultKeepsService } from '../services/VaultKeepsService'
 export default {
   name: 'Home',
   setup() {
@@ -27,7 +26,6 @@ export default {
     onMounted(async() => {
       try {
         await keepsService.getAll()
-        await vaultKeepsService.getAll()
       } catch (error) {
         logger.error(error)
       }
@@ -47,4 +45,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.masonry {
+  column-count: 3;
+  column-gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  min-height: 100vh;
+}
+
+.item {
+  background-color: #eee;
+  display: inline-block;
+  margin: 0 0 1em;
+  width: 100%;
+}
+
 </style>
