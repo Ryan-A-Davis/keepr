@@ -12,6 +12,7 @@ import { AppState } from '../AppState'
 import { keepsService } from '../services/KeepsService'
 // import { useRouter } from 'vue-router'
 import { logger } from '../utils/Logger'
+import { vaultKeepsService } from '../services/VaultKeepsService'
 export default {
   name: 'Home',
   setup() {
@@ -26,6 +27,7 @@ export default {
     onMounted(async() => {
       try {
         await keepsService.getAll()
+        await vaultKeepsService.getAll()
       } catch (error) {
         logger.error(error)
       }

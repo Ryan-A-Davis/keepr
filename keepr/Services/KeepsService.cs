@@ -31,7 +31,7 @@ namespace keepr.Services
 			return original;
 		}
 
-		internal IEnumerable<KeepVaultKeepViewModel> GetByVaultId(int id, string userId)
+		internal IEnumerable<Keep> GetByVaultId(int id, string userId)
 		{
 			Profile profile = _prepo.GetById(userId);
 			Vault vault = _vrepo.Get(id);
@@ -39,7 +39,7 @@ namespace keepr.Services
 			{
 				throw new Exception("Invalid Id");
 			}
-			if (vault.IsPrivate)
+			if (vault.IsPrivate && vault.CreatorId != userId)
 			{
 				throw new NotAuthorized("This vault has been set to private!");
 			}

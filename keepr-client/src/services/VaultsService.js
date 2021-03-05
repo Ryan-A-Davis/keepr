@@ -2,38 +2,40 @@ import { AppState } from '../AppState'
 import { api } from './AxiosService'
 
 class VaultsService {
-  async getVaults() {
-    const res = await api.get('api/vaults')
+  async getByProfileId(id) {
+    const res = await api.get('api/profiles/' + id + '/vaults')
     console.log(res)
     AppState.vaults = res.data
   }
 
-  async getvault(id) {
+  async getById(id) {
     const res = await api.get('api/vaults/' + id)
     console.log(res)
-    AppState.activevault = res.data
+    AppState.activeVault = res.data
   }
 
-  async createVault(vaultData) {
+  async create(vaultData) {
     const res = await api.post('api/vaults', vaultData)
     console.log(res)
+    AppState.vaults = [...AppState.vaults, res.data]
   }
 
-  async editVault(vaultId, edited) {
+  async edit(vaultId, edited) {
     const toUpdate = edited
     const res = await api.put('api/vaults/' + vaultId, toUpdate)
     const vaultInd = AppState.vaults.findIndex(k => k.id === vaultId)
     AppState.vaults.splice(vaultInd, 1, res.data)
   }
 
-  async deleteVault(vaultId) {
+  async delete(vaultId) {
     await api.delete('api/vaults/' + vaultId)
     const vaultInd = AppState.vaults.findIndex(k => k.id === vaultId)
     AppState.vaults.splice(vaultInd, 1)
   }
 
   async addKeep(id) {
-    await api.post('api/vaults/' + id + '/keeps')
+    const res = await api.post('api/vaults/' + id + '/keeps')
+    console.log(res.data)
   }
 }
 

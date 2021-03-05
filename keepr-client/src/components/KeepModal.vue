@@ -59,10 +59,12 @@ export default {
   setup() {
     const state = reactive({
       user: computed(() => AppState.user),
-      vaults: computed(() => AppState.userVaults)
+      vaults: computed(() => AppState.userVaults),
+      profile: computed(() => AppState.activeProfile)
     })
     const router = useRouter()
     return {
+      state,
       async remove(id) {
         try {
           await keepsService.delete(id)
@@ -79,8 +81,8 @@ export default {
         }
       },
       async goToProfile(id) {
-        const profile = await profilesService.getById(id)
-        router.push({ name: 'Profile', params: { id: profile.id } })
+        await profilesService.getById(id)
+        router.push({ name: 'Profile', params: { id: state.profile.id } })
       }
     }
   },

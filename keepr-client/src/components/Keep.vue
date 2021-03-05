@@ -1,5 +1,11 @@
 <template>
-  <div class="keep col-4-lg-3 card" type="button" :data-target="'#modal' + keepProps.id " data-toggle="modal" :style="`background-image: url(${keepProps.img})`">
+  <div class="keep col-4-lg-3 card"
+       @click="updateViews(keepProps.id)"
+       type="button"
+       :data-target="'#modal' + keepProps.id "
+       data-toggle="modal"
+       :style="`background-image: url(${keepProps.img})`"
+  >
     <div class="row align-self-end justify-content-between mb-1">
       <div class="col-4">
         <p>{{ keepProps.name }}</p>
@@ -38,10 +44,16 @@ export default {
         } catch (error) {
           logger.error(error)
         }
+      },
+      async updateViews(id) {
+        try {
+          const update = await keepsService.getById(id)
+          update.views += 1
+          await keepsService.edit(id, update)
+        } catch (error) {
+          logger.error(error)
+        }
       }
-      //   setActive(id) {
-      //     targetKeep =
-      //   }
     }
   }
 }

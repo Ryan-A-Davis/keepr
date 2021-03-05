@@ -1,12 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-info">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
-        <img
-          alt="logo"
-          src="../assets/img/cw-logo.png"
-          height="45"
-        />
+        <img id="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDaUHk5UPcVKSTmNrDPzGarpXNJIQ-PvzS8Q&usqp=CAU" />
       </div>
     </router-link>
     <button
@@ -25,11 +21,6 @@
         <li class="nav-item">
           <router-link :to="{ name: 'Home' }" class="nav-link">
             Home
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'About' }" class="nav-link">
-            About
           </router-link>
         </li>
       </ul>
@@ -123,5 +114,9 @@ a:hover {
 }
 .nav-item .nav-link.router-link-exact-active{
   color: var(--primary);
+}
+#logo{
+  max-height: 50px;
+  background-color: aquamarine;
 }
 </style>
