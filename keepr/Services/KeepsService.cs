@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using keepr.Models;
 using keepr.Repositories;
+using keepr.Exceptions;
 
 namespace keepr.Services
 {
@@ -9,9 +10,13 @@ namespace keepr.Services
 	{
 
 		private readonly KeepsRepository _repo;
-		public KeepsService(KeepsRepository repo)
+		private readonly VaultsRepository _vrepo;
+		private readonly ProfilesRepository _prepo;
+		public KeepsService(KeepsRepository repo, VaultsRepository vrepo, ProfilesRepository prepo)
 		{
 			_repo = repo;
+			_vrepo = vrepo;
+			_prepo = prepo;
 		}
 		public IEnumerable<Keep> GetAll()
 		{
@@ -26,9 +31,19 @@ namespace keepr.Services
 			return original;
 		}
 
-		internal IEnumerable<Keep> GetByVaultId(int id)
+		internal IEnumerable<KeepVaultKeepViewModel> GetByVaultId(int id, string userId)
 		{
-			return _repo.GetByVaultId(id)
+			Profile profile = _prepo.GetById(userId);
+			Vault vault = _vrepo.Get(id);
+			if (vault == null)
+			{
+				throw new Exception("Invalid Id");
+			}
+			if (vault.IsPrivate)
+			{
+				throw new NotAuthorized("This vault has been set to private!");
+			}
+			return _repo.GetByVaultId(id);
 		}
 
 		public Keep Create(Keep newKeep)
@@ -50,6 +65,12 @@ namespace keepr.Services
 			editData.Views = editData.Views == 0 ? original.Views : editData.Views;
 			editData.Keeps = editData.Keeps == 0 ? original.Keeps : editData.Keeps;
 			return _repo.Edit(editData);
+		}
+
+		internal IEnumerable<Keep> GetKeepsByUser(string id)
+		{
+			IEnumerable<Keep> keeps = _repo.GetAllByUser(id);
+			return keeps;
 		}
 
 		internal string Delete(int id, string userId)

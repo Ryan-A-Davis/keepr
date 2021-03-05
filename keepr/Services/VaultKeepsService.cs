@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using keepr.Exceptions;
 using keepr.Models;
 using keepr.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace keepr.Services
 {
@@ -17,28 +19,42 @@ namespace keepr.Services
 			_vrepo = vrepo;
 			_krepo = krepo;
 		}
-
-		internal void Create(VaultKeep vaultKeep, string id, int vaultId, int keepId)
+		internal VaultKeep Get(int id)
 		{
-			Vault vault = _vrepo.GetById(vaultId);
-			Keep keep = _krepo.GetById(keepId);
-			if(vault == null || keep == null)
-			{
-				throw new Exception ("Invalid keep/vault Id");
-			}
-			if(vault.CreatorId != id || keep.CreatorId != id)
-			{
-				throw new Exception("Not the Owner of this object");
-			}
-			_repo.Create(vaultKeep);
-		}
-
-		internal void Delete(int id)
-		{
-			var data = _repo.GetById(id);
-			if (data == null)
+			VaultKeep exists = _repo.GetById(id);
+			if (exists == null)
 			{
 				throw new Exception("Invalid Id");
+			}
+			return exists;
+		}
+		internal IEnumerable<VaultKeep> Get()
+		{
+			IEnumerable<VaultKeep> vaultkeeps = _repo.GetAll();
+			return vaultkeeps;
+		}
+		internal void Create(VaultKeep vaultKeep, string id)
+		{
+			Vault vault = _vrepo.Get(vaultKeep.VaultId);
+			Keep keep = _krepo.GetById(vaultKeep.KeepId);
+			if (vault == null || keep == null)
+			{
+				throw new Exception("Invalid keep/vault Id");
+			}
+			if (vaultKeep.CreatorId != id)
+			{
+				throw new NotAuthorized("You are not the owner of this vault");
+			}
+			vaultKeep.Id = _repo.Create(vaultKeep);
+		}
+
+
+		internal void Delete(int id, string userId)
+		{
+			VaultKeep data = Get(id);
+			if (data == null || data.CreatorId != userId)
+			{
+				throw new Exception("Invalid Id and/or you are not the creator.");
 			}
 			_repo.Delete(id);
 		}

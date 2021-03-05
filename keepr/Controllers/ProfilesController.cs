@@ -10,16 +10,19 @@ using Microsoft.AspNetCore.Mvc;
 namespace keepr.Controllers
 {
 	[ApiController]
-	[Route("api/controller")]
+	[Route("api/[controller]")]
 	public class ProfilesController : ControllerBase
 	{
 		private readonly ProfilesService _service;
 		private readonly VaultsService _vservice;
 
-		public ProfilesController(ProfilesService service VaultsService vservice)
+		private readonly KeepsService _kservice;
+
+		public ProfilesController(ProfilesService service, VaultsService vservice, KeepsService kservice)
 		{
 			_service = service;
 			_vservice = vservice;
+			_kservice = kservice;
 		}
 
 		[HttpGet("{id}")]
@@ -37,16 +40,30 @@ namespace keepr.Controllers
 		}
 
 		[HttpGet("{id}/vaults")]
-    public ActionResult<IEnumerable<Vault>> GetVaultsByUserId(string id)
-    {
-      try
-      {
-        return Ok(_vservice.GetVaultsByUserId(id));
-      }
-      catch (Exception e)
-      {
-        return BadRequest(e.Message);
-      };
-    }
+		public ActionResult<IEnumerable<Vault>> GetVaultsByUserId(string id)
+		{
+			try
+			{
+				return Ok(_vservice.GetVaultsByUser(id));
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			};
+		}
+
+		[HttpGet("{id}/keeps")]
+
+		public ActionResult<IEnumerable<Keep>> GetKeepsByUserId(string id)
+		{
+			try
+			{
+				return Ok(_kservice.GetKeepsByUser(id));
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			};
+		}
 	}
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using keepr.Exceptions;
 using keepr.Models;
 using keepr.Repositories;
 
@@ -15,15 +17,17 @@ namespace keepr.Services
 		}
 		public IEnumerable<Vault> GetVaultsByUser(string id)
 		{
-			IEnumerable<Vault> vaults = _repo.GetVaultsByUser(id);
-			return vaults;
+			return _repo.GetVaultsByUser(id).ToList().FindAll(v => !v.IsPrivate);
 		}
 
 		public Vault Get(int id)
 		{
-			Vault original = _repo.GetById(id);
-			if (original == null) { throw new Exception("Invalid Id"); }
-			return original;
+			Vault vault = _repo.Get(id);
+			if (vault == null)
+			{
+				throw new Exception("Invalid Id");
+			}
+			return vault;
 		}
 
 		public Vault Create(Vault newVault)
@@ -31,6 +35,7 @@ namespace keepr.Services
 			newVault.Id = _repo.Create(newVault);
 			return newVault;
 		}
+
 
 		internal Vault Edit(Vault editData, string userId)
 		{
@@ -41,6 +46,7 @@ namespace keepr.Services
 			}
 			editData.Name = editData.Name == null ? original.Name : editData.Name;
 			editData.Description = editData.Description == null ? original.Description : editData.Description;
+			editData.IsPrivate = editData.IsPrivate == true ? editData.IsPrivate : original.IsPrivate;
 			return _repo.Edit(editData);
 		}
 

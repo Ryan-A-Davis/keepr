@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Dapper;
 using keepr.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace keepr.Repositories
 {
@@ -17,19 +18,28 @@ namespace keepr.Repositories
 			_db = db;
 		}
 
-		internal void Create(VaultKeep vk)
+		internal IEnumerable<VaultKeep> GetAll()
+		{
+			string sql = @"
+      SELECT * FROM vaultkeeps";
+			return _db.Query<VaultKeep>(sql);
+		}
+
+
+		internal int Create(VaultKeep vk)
 		{
 			string sql = @"
 			INSERT INTO vaultkeeps
-			(vaultId, keepId)
+			(vaultId, keepId, creatorId)
 			VALUES
-			(@VaultId, @KeepId);";
-			_db.Execute(sql, vk);
+			(@VaultId, @KeepId, @CreatorId);
+			SELECT LAST_INSERT_ID()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ;";
+			return _db.ExecuteScalar<int>(sql, vk);
 		}
 
 		internal VaultKeep GetById(int id)
 		{
-			string sql = "SELECT FROM vaultkeeps WHERE id = @id;";
+			string sql = "SELECT * FROM vaultkeeps WHERE id = @id;";
 			return _db.QueryFirstOrDefault<VaultKeep>(sql, new { id });
 		}
 
@@ -38,5 +48,6 @@ namespace keepr.Repositories
 			string sql = "DELETE FROM vaultkeeps WHERE id = @id LIMIT 1;";
 			_db.Execute(sql, new { id });
 		}
+
 	}
 }

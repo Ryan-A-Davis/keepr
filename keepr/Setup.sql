@@ -35,6 +35,7 @@
 -- 	PRIMARY KEY (id),
 
 
+
 -- 	FOREIGN KEY (creatorId)
 -- 		REFERENCES profiles(id)
 -- 		ON DELETE CASCADE
@@ -42,7 +43,7 @@
 
 -- CREATE TABLE vaultkeeps
 -- (
--- 	id INT AUTO_INCREMENT,
+-- 	id INT AUTO_INCREMENT NOT NULL,
 -- 	vaultId INT,
 -- 	keepId INT,
 -- 	creatorId VARCHAR(255),
@@ -62,5 +63,8 @@
 -- 	ON DELETE CASCADE
 -- );
 
--- DELETE FROM
 
+
+-- DELETE FROM keeps ;
+                
+SELECT * FROM vaults;

@@ -23,20 +23,22 @@ namespace keepr.Repositories
 			vault.*,
 			profile.*
 			FROM vaults vault
-			JOIN profiles profile ON review.creatorId = profile.Id 
+			JOIN profiles profile ON vault.creatorId = profile.Id 
 			WHERE vault.creatorId = @id";
-			return _db.Query<Vault, Profile,Vault>(sql, (vault, profile)=> {
-				vault.Creator = profile; return vault}, new {id} spltOn: "id");
+			return _db.Query<Vault, Profile, Vault>(sql, (vault, profile) =>
+			{
+				vault.Creator = profile; return vault;
+			}, new { id }, splitOn: "id");
 		}
 
-		internal Vault GetById(int id)
+		internal Vault Get(int id)
 		{
 			string sql = @"
 			SELECT 
 			vault.*,
 			pr.*
 			FROM vaults vault
-			JOIN profiles pr ON vault.ownerId = pr.id
+			JOIN profiles pr ON vault.creatorId = pr.id
 			WHERE vault.id = @id;";
 			return _db.Query<Vault, Profile, Vault>(sql, (vault, profile) =>
 			{
@@ -67,8 +69,8 @@ namespace keepr.Repositories
 			string sql = @"
         UPDATE vaults
         SET
-        name = @Name
-				description = @Description
+				name = @Name,
+        description = @Description,
 				isPrivate = @IsPrivate
         WHERE id = @Id;";
 			_db.Execute(sql, updated);

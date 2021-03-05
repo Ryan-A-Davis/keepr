@@ -18,8 +18,13 @@ namespace keepr.Repositories
 		}
 		internal IEnumerable<Keep> GetAll()
 		{
-			string sql = "SELECT * FROM keeps";
-			return _db.Query<Keep>(sql);
+			string sql = @"
+			SELECT
+			keep.*,
+			prof.*
+			FROM keeps keep
+			JOIN profiles prof ON keep.creatorId = prof.id";
+			return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) => { keep.Creator = profile; return keep; });
 		}
 
 		internal Keep GetById(int id)
@@ -38,16 +43,19 @@ namespace keepr.Repositories
 			}, new { id }, splitOn: "id").FirstOrDefault();
 		}
 
-		internal IEnumerable<Keep> GetByVaultId(int id)
+		internal IEnumerable<KeepVaultKeepViewModel> GetByVaultId(int id)
 		{
 			string sql = @"
 			SELECT
-
-
-			FROM keeps
-
-			WHERE 
-			"
+			keep.*,
+			vk.id AS VaultKeepId,
+			prof.*		
+			FROM vaultkeeps vk
+			JOIN keeps keep ON vk.keepId = keep.id
+			JOIN profiles prof ON keep.creatorId = prof.id
+			WHERE vaultId = @id;";
+			IEnumerable<KeepVaultKeepViewModel> keeps = _db.Query<KeepVaultKeepViewModel, Profile, KeepVaultKeepViewModel>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, new { id }, splitOn: "id");
+			return keeps;
 		}
 
 		internal int Create(Keep newKeep)
@@ -59,6 +67,18 @@ namespace keepr.Repositories
 			(@CreatorId, @Name, @Img, @Description, @Views, @Keeps);
 			SELECT LAST_INSERT_ID();";
 			return _db.ExecuteScalar<int>(sql, newKeep);
+		}
+
+		internal IEnumerable<Keep> GetAllByUser(string id)
+		{
+			string sql = @"
+			SELECT 
+			keep.*,
+			prof.*
+			FROM keeps keep
+			JOIN profiles prof ON keep.creatorId = prof.id
+			WHERE keep.creatorId = @id;";
+			return _db.Query<Keep, Profile, Keep>(sql, (keep, profile) => { keep.Creator = profile; return keep; }, new { id }, splitOn: "id");
 		}
 
 		internal void Delete(int id)
