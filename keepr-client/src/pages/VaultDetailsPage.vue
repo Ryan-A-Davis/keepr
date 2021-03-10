@@ -11,7 +11,7 @@
       <div v-for="keep in state.keeps" :key="keep.id">
         <Keep :keep-props="keep" />
         <!-- TODO delete relationship vk from here -->
-        <button class="btn btn-danger" @click="remove(keep.vaultKeepId)">
+        <button v-if="keep.creatorId === state.user.id" class="btn btn-danger" @click="remove(keep.vaultKeepId)">
           Delete
         </button>
       </div>

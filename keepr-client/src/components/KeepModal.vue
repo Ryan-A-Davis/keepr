@@ -45,7 +45,7 @@
                 </option>
               </select>
             </div>
-            <div class="col-3" v-if="keepProps.creatorId === state.user.id">
+            <div class="col-3" v-if="keepProps.creatorId === state.account.id">
               <button class="btn btn-danger" @click="remove()">
               </button>
             </div>
@@ -69,6 +69,9 @@ import { logger } from '../utils/Logger'
 import { AppState } from '../AppState'
 import { useRouter } from 'vue-router'
 import { vaultKeepsService } from '../services/VaultKeepsService'
+import NotificationService from '../services/NotificationsService'
+// import { vaultsService } from '../services/VaultsService'
+
 // import { vaultsService } from '../services/VaultsService'
 export default {
   name: 'KeepModal',
@@ -89,7 +92,9 @@ export default {
     onMounted(async() => {
       try {
         await profilesService.getById(props.keepProps.creatorId)
-        await accountService.getVaults()
+        if (state.account.id === state.user.id) {
+          await accountService.getVaults()
+        }
       } catch (error) {
         logger.error(error)
       }
@@ -99,7 +104,9 @@ export default {
       state,
       async remove() {
         try {
-          await keepsService.delete(props.keepProps.id)
+          if (await NotificationService.confirm()) {
+            await keepsService.delete(props.keepProps.id)
+          }
         } catch (error) {
           logger.error(error)
         }
@@ -119,6 +126,7 @@ export default {
         await profilesService.getById(id)
         router.push({ name: 'Profile', params: { id: state.profile.id } })
       }
+
     }
   },
   components: {}
