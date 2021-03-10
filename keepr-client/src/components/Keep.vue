@@ -13,9 +13,9 @@
       <div class="col-4">
         <img id="profImg" :src="keepProps.creator.picture" alt="">
       </div>
+      <KeepModal :keep-props="keepProps" />
     </div>
   </div>
-  <KeepModal :keep-props="keepProps" />
 </template>
 
 <script>
@@ -70,10 +70,6 @@ export default {
 #profImg{
   border-radius: 50%;
   max-height: 70px;
-}
-
-.item{
-  margin: 7%;
 }
 
 </style>
