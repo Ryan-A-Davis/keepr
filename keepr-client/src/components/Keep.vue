@@ -59,7 +59,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+ <style lang="scss" scoped>
 
 .keep{
   min-height: 150px;
@@ -69,7 +69,7 @@ export default {
 }
 #profImg{
   border-radius: 50%;
-  max-height: 70px;
+  max-height: 60px;
 }
 
 </style>
