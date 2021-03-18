@@ -34,7 +34,8 @@ export default {
   setup(props) {
     const state = reactive({
       account: computed(() => AppState.account),
-      targetKeep: computed(() => AppState.activeKeep)
+      targetKeep: computed(() => AppState.activeKeep),
+      user: computed(() => AppState.user)
     })
     return {
       state,
@@ -48,8 +49,10 @@ export default {
       async updateViews(id) {
         try {
           const update = await keepsService.getById(id)
-          update.views += 1
-          await keepsService.edit(id, update)
+          if (state.user !== state.account) {
+            update.views += 1
+            await keepsService.edit(id, update)
+          }
         } catch (error) {
           logger.error(error)
         }
