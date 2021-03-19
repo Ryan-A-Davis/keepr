@@ -8,7 +8,9 @@
   >
     <div class="row align-self-end justify-content-between mb-1">
       <div class="col-4">
-        <p>{{ keepProps.name }}</p>
+        <p class="font-weight-bold text-white">
+          {{ keepProps.name }}
+        </p>
       </div>
       <div class="col-4">
         <img id="profImg" :src="keepProps.creator.picture" alt="">

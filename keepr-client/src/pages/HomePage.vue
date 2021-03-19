@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="row justify-content-around masonry">
+    <div class="row mt-3 grid-container">
       <Keep v-for="keep in state.keeps" :key="keep.id" :keep-props="keep" :class="'item'" />
     </div>
   </div>
@@ -45,20 +45,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.masonry {
-  column-count: 3;
-  column-gap: 10px;
-  display: flex;
-  justify-content: center;
-  align-self: center;
-  min-height: 100vh;
+.grid-container {
+  columns: 3 200px;
+  column-gap: 1.5rem;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .item {
-  background-color: #eee;
   display: inline-block;
-  margin: 0 0 1em;
-  width: 100%;
+  margin: 0 1.5rem 1.5rem 0;
+  width: 150px;
+  border: solid 2px black;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
 }
 
 </style>

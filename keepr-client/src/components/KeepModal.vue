@@ -25,13 +25,15 @@
                     </p>
                   </div>
                   <div class="col-3">
-                    <p> Keeps: {{ keepProps.keeps }}</p>
+                    <p class="text-warning">
+                      Keeps: {{ keepProps.keeps }}
+                    </p>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row text-center">
                   <h2>{{ keepProps.name }}</h2>
                 </div>
-                <div class="row">
+                <div class="row text-center">
                   <p>{{ keepProps.description }}</p>
                 </div>
               </div>
@@ -47,6 +49,7 @@
             </div>
             <div class="col-3" v-if="keepProps.creatorId === state.account.id">
               <button class="btn btn-danger" @click="remove()">
+                Delete
               </button>
             </div>
             <div class="col-3">
@@ -64,15 +67,11 @@ import { computed, reactive, onMounted } from 'vue'
 import { profilesService } from '../services/ProfilesService'
 import { accountService } from '../services/AccountService'
 import { keepsService } from '../services/KeepsService'
-// import { vaultKeepsService } from '../services/VaultKeepsService'
 import { logger } from '../utils/Logger'
 import { AppState } from '../AppState'
 import { useRouter } from 'vue-router'
 import { vaultKeepsService } from '../services/VaultKeepsService'
 import NotificationService from '../services/NotificationsService'
-// import { vaultsService } from '../services/VaultsService'
-
-// import { vaultsService } from '../services/VaultsService'
 export default {
   name: 'KeepModal',
   props: {
@@ -116,7 +115,6 @@ export default {
           // state.vaults = await profilesService.getVaults(state.user.id)
           // await vaultKeepsService.create(id, state.vaults[0].id)
           logger.log(state.selectedVault)
-          debugger
           await vaultKeepsService.create(state.selectedVault, props.keepProps.id)
         } catch (error) {
           logger.error(error)
@@ -141,7 +139,7 @@ export default {
 
 #profImg{
   border-radius: 50%;
-  max-height: 70px;
+  max-height: 40px;
 }
 
 </style>
