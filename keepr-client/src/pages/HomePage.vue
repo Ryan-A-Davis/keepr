@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid ">
-    <div class="grid-container">
+    <div class="card-columns mb-4">
       <Keep v-for="keep in state.keeps" :key="keep.id" :keep-props="keep" :class="'item'" />
     </div>
   </div>
@@ -57,11 +57,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.grid-container {
-  column-count: 5;
-  column-gap: 20px;
+// .grid-container {
+//   column-count: 5;
+//   column-gap: 20px;
 
-}
+// }
 
 .item {
   display: inline-block;

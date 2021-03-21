@@ -1,5 +1,5 @@
 <template>
-  <div class="keep col-4-lg-3 card item"
+  <div class="keep col-4-lg-3 card my-2 k-i"
        type="button"
        :data-target="'#modal' + keepProps.id "
        data-toggle="modal"
@@ -46,6 +46,12 @@ export default {
 </script>
 
  <style lang="scss" scoped>
+
+ .k-i{
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
+ }
 
 #profImg{
   border-radius: 50%;
