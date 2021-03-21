@@ -10,8 +10,7 @@
     </router-view>
   </main>
   <footer>
-    <div class="bg-dark text-light text-center p-4">
-      Made with 💖 by CodeWorks
+    <div class="bg-info text-light h-100 w-100 p-4">
     </div>
   </footer>
 </template>
@@ -30,5 +29,8 @@ export default {
 </script>
 <style lang="scss">
 @import "./assets/scss/main.scss";
+.container-fluid{
+  background-color: rgb(217, 217, 236) ;
+}
 
 </style>

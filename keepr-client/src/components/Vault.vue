@@ -5,9 +5,6 @@
         <h4 class="card-title" @click="goToVault(vaultProps.id)">
           {{ vaultProps.name }}
         </h4>
-        <button class="btn btn-danger" v-if="vaultProps.creatorId === state.account.id" @click="remove">
-          Delete
-        </button>
       </div>
     </div>
   </div>
@@ -17,9 +14,9 @@
 import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { AppState } from '../AppState'
-import { vaultsService } from '../services/VaultsService'
-import NotificationService from '../services/NotificationsService'
-import { logger } from '../utils/Logger'
+// import { vaultsService } from '../services/VaultsService'
+// import NotificationService from '../services/NotificationsService'
+// import { logger } from '../utils/Logger'
 
 export default {
   name: 'Vault',
@@ -38,17 +35,6 @@ export default {
       state,
       goToVault(id) {
         router.push({ name: 'VaultDetails', params: { id: id } })
-      },
-      async remove() {
-        try {
-          if (await NotificationService.confirm()) {
-            await vaultsService.delete(props.vaultProps.id)
-          } else {
-            alert('changes not saved')
-          }
-        } catch (error) {
-          logger.error(error)
-        }
       }
     }
   }
@@ -64,6 +50,9 @@ export default {
 
   min-height: 200px;
   min-width: 200px;
+}
+.h4:hover{
+  cursor: pointer;
 }
 
 </style>

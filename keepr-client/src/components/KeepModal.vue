@@ -5,13 +5,10 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <!-- TODO add views and keeps value -->
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <!-- TODO Remove the title, make Modal body a container-fluid
-          split col-6s for content -->
           <div class="modal-body container-fluid">
             <div class="row">
               <div class="col-6">

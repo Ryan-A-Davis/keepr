@@ -1,6 +1,5 @@
 <template>
   <div class="keep col-4-lg-3 card item"
-       @click="updateViews(keepProps.id)"
        type="button"
        :data-target="'#modal' + keepProps.id "
        data-toggle="modal"
@@ -23,8 +22,8 @@
 <script>
 import { reactive, computed } from 'vue'
 import { AppState } from '../AppState'
-import { keepsService } from '../services/KeepsService'
-import { logger } from '../utils/Logger'
+// import { keepsService } from '../services/KeepsService'
+// import { logger } from '../utils/Logger'
 export default {
   name: 'Keep',
   props: {
@@ -40,25 +39,7 @@ export default {
       user: computed(() => AppState.user)
     })
     return {
-      state,
-      async delete() {
-        try {
-          await keepsService.delete(props.p.id)
-        } catch (error) {
-          logger.error(error)
-        }
-      },
-      async updateViews(id) {
-        try {
-          const update = await keepsService.getById(id)
-          if (state.user !== state.account) {
-            update.views += 1
-            await keepsService.edit(id, update)
-          }
-        } catch (error) {
-          logger.error(error)
-        }
-      }
+      state
     }
   }
 }
@@ -66,15 +47,9 @@ export default {
 
  <style lang="scss" scoped>
 
-.keep{
-  min-height: 150px;
-  background-position:center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 #profImg{
   border-radius: 50%;
-  max-height: 60px;
+  max-height: 30px;
 }
-
+//  <KeepModal :keep-props="keepProps" />
 </style>

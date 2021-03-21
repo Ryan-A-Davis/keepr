@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid">
-    <div class="row mt-3 grid-container">
+  <div class="container-fluid ">
+    <div class="grid-container">
       <Keep v-for="keep in state.keeps" :key="keep.id" :keep-props="keep" :class="'item'" />
     </div>
   </div>
@@ -38,6 +38,18 @@ export default {
         } catch (error) {
           logger.error(error)
         }
+      },
+      async updateViews(id) {
+        try {
+          debugger
+          const update = await keepsService.getById(id)
+          if (state.user !== state.account) {
+            update.views += 1
+            await keepsService.edit(id, update)
+          }
+        } catch (error) {
+          logger.error(error)
+        }
       }
     }
   }
@@ -46,16 +58,16 @@ export default {
 
 <style scoped lang="scss">
 .grid-container {
-  columns: 3 200px;
-  column-gap: 1.5rem;
-  width: 90%;
-  margin: 0 auto;
+  column-count: 5;
+  column-gap: 20px;
+
 }
 
 .item {
   display: inline-block;
-  margin: 0 1.5rem 1.5rem 0;
-  width: 150px;
+  margin: 15px 15px 15px;
+  width: auto;
+  box-sizing: border-box;
   border: solid 2px black;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
   border-radius: 5px;

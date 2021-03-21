@@ -1,8 +1,10 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-info">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
-        <img id="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDaUHk5UPcVKSTmNrDPzGarpXNJIQ-PvzS8Q&usqp=CAU" />
+      <div class="box text-center align-items-center">
+        <p class="logo">
+          K
+        </p>
       </div>
     </router-link>
     <button
@@ -116,8 +118,9 @@ a:hover {
 .nav-item .nav-link.router-link-exact-active{
   color: var(--primary);
 }
-#logo{
-  max-height: 50px;
-  background-color: aquamarine;
+.box{
+  background-color: rgb(126, 16, 16);
+  min-height: 40px;
+  min-width: 40px;
 }
 </style>

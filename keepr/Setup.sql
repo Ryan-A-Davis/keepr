@@ -65,6 +65,6 @@
 
 
 
--- DELETE FROM vaultkeeps;
+-- DELETE FROM keeps;
                 
-SELECT * FROM keeps;
+-- SELECT * FROM keeps;
